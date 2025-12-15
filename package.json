@@ -6,10 +6,9 @@
         "test": "jest"
     },
     "author": "Antonio Victor Melo Trindade",
-    "workspaces": [
-        "apps/*"
-    ],
+    "workspaces": ["apps/*", "packages/*"],
     "dependencies": {
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "@desafio-tecnico-procimo/eslint-config": "*"
     }
 }
