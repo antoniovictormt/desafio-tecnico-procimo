@@ -22,8 +22,6 @@ app.use(express.static(path.resolve(__dirname, "..", "public")))
 let messages = initialMessages.slice(-10)
 
 io.on("connection", socket => {
-    console.log("Socket conectado:", socket.id)
-
     socket.on("login", user => {
         socket.data.user = user
 
