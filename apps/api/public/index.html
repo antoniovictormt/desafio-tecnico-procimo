@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+        <link rel="stylesheet" href="index.css" />
+    </head>
+    <body>
+        <form id="chat">
+            <div class="chat-container">
+                <input
+                    type="text"
+                    name="user"
+                    id="user"
+                    class="username"
+                    placeholder="Seu nome"
+                />
+
+                <div class="messages"></div>
+
+                <div class="chat-footer">
+                    <input
+                        type="text"
+                        name="content"
+                        id="content"
+                        placeholder="Digite sua mensagem"
+                    />
+                    <button type="submit">Enviar</button>
+                </div>
+            </div>
+        </form>
+
+        <script type="text/javascript">
+            const socket = io("http://localhost:3333")
+
+            const messagesDiv = document.querySelector(".messages")
+
+            function renderMessage(message) {
+                const messageElement = document.createElement("div")
+                messageElement.classList.add("message")
+
+                messageElement.innerHTML = `
+        <strong>${message.user}</strong>: ${message.content}
+    `
+
+                messagesDiv.appendChild(messageElement)
+                messagesDiv.scrollTop = messagesDiv.scrollHeight
+            }
+
+            socket.on("previousMessage", function (messages) {
+                messages.forEach(message => {
+                    renderMessage(message)
+                })
+            })
+
+            socket.on("receivedMessage", function (message) {
+                renderMessage(message)
+            })
+
+            const form = document.getElementById("chat")
+            const usernameInput = document.getElementById("user")
+            const messageInput = document.getElementById("content")
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault()
+
+                const user = usernameInput.value
+                const content = messageInput.value
+
+                if (user && content) {
+                    const messageObject = {
+                        user,
+                        content,
+                        timestamp: Date.now()
+                    }
+
+                    renderMessage(messageObject)
+                    socket.emit("message", messageObject)
+
+                    messageInput.value = ""
+                }
+            })
+        </script>
+    </body>
+</html>
