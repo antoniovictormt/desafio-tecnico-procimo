@@ -1,8 +1,7 @@
 import type { Config } from "jest"
-const { name } = require("./package.json")
 
 const config: Config = {
-    displayName: name,
+    displayName: "desafio-tecnico-procimo/web",
     preset: "ts-jest",
     testEnvironment: "node",
     testMatch: ["<rootDir>/src/**/*.spec.ts"]
