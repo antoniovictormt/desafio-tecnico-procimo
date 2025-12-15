@@ -2,34 +2,29 @@
 
 import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-
-interface Message {
-    id: string
-    user: string
-    content: string
-}
+import { IMessage } from "@/hooks/useChat"
 
 export function ChatMessages({
     messages,
     currentUser
 }: {
-    messages: Message[]
+    messages: IMessage[]
     currentUser: string | null
 }) {
-    const bottomRef = useRef<HTMLDivElement | null>(null)
+    const bottomRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
 
     return (
-        <div className="h-100 space-y-3 overflow-y-auto p-4">
-            {messages.map(message => {
-                const isMine = message.user === currentUser
+        <div className="h-full space-y-3 overflow-y-auto p-4">
+            {messages.map(msg => {
+                const isMine = msg.user === currentUser
 
                 return (
                     <div
-                        key={message.id}
+                        key={msg.id}
                         className={cn(
                             "flex",
                             isMine ? "justify-end" : "justify-start"
@@ -37,7 +32,7 @@ export function ChatMessages({
                     >
                         <div
                             className={cn(
-                                "max-w-[75%] rounded-lg px-3 py-2 text-sm",
+                                "max-w-3/4 rounded-lg px-3 py-2 text-sm leading-relaxed wrap-break-word whitespace-pre-wrap",
                                 isMine
                                     ? "bg-primary text-primary-foreground"
                                     : "bg-muted"
@@ -45,10 +40,10 @@ export function ChatMessages({
                         >
                             {!isMine && (
                                 <div className="mb-1 text-xs font-semibold">
-                                    {message.user}
+                                    {msg.user}
                                 </div>
                             )}
-                            {message.content}
+                            {msg.content}
                         </div>
                     </div>
                 )

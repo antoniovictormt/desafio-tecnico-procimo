@@ -1,58 +1,36 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { getSavedUser, clearUser } from "@/lib/storage"
-import { socket } from "@/lib/socket"
 import { Button } from "@/components/ui/button"
-import LoginModal from "../login-modal"
-import { ChatInput } from "./form"
+import { LoginModal } from "../login-modal"
+import { ChatForm } from "./form"
 import { ChatMessages } from "./messages"
-import { toast } from "sonner"
+import { useChat } from "@/hooks/useChat"
+import { LogOut } from "lucide-react"
 
-export function Chat() {
-    const [user, setUser] = useState<string | null>(null)
-    const [messages, setMessages] = useState<any[]>([])
-
-    useEffect(() => {
-        const savedUser = getSavedUser()
-        if (savedUser) {
-            setUser(savedUser)
-            socket.emit("login", savedUser)
-        }
-    }, [])
-
-    useEffect(() => {
-        socket.on("previousMessage", setMessages)
-        return () => {
-            socket.off("previousMessage")
-        }
-    }, [])
-
-    useEffect(() => {
-        socket.on("errorMessage", payload => {
-            toast.error(payload.message)
-        })
-    }, [])
-
-    function logout() {
-        clearUser()
-        location.reload()
-    }
+export function Chat({ initialUser }: { initialUser: string | null }) {
+    const { messages, setUser, user, logout } = useChat({
+        initialUser
+    })
 
     return (
         <>
             <LoginModal open={!user} onLogin={setUser} />
 
-            <div className="bg-background w-full max-w-xl rounded-xl border shadow">
-                <div className="flex items-center justify-between border-b p-4">
+            <div className="bg-background flex h-11/12 w-11/12 flex-col rounded-lg">
+                <header className="flex items-center justify-between border-b px-4 py-3">
                     <span className="font-semibold">{user}</span>
-                    <Button variant="outline" onClick={logout}>
-                        Sair
+                    <Button variant="ghost" size="sm" onClick={logout}>
+                        <LogOut />
                     </Button>
+                </header>
+
+                <div className="flex-1 overflow-hidden">
+                    <ChatMessages messages={messages} currentUser={user} />
                 </div>
 
-                <ChatMessages messages={messages} currentUser={user} />
-                <ChatInput />
+                <footer className="border-t p-3">
+                    <ChatForm />
+                </footer>
             </div>
         </>
     )

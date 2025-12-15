@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { saveUser } from "@/lib/storage"
 import { socket } from "@/lib/socket"
 
-export default function LoginModal({
+export function LoginModal({
     open,
     onLogin
 }: {

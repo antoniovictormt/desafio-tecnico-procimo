@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { socket } from "@/lib/socket"
 import { useRef, useEffect } from "react"
 
-export function ChatInput() {
+export function ChatForm() {
     function handleSubmit(formData: FormData) {
         const content = formData.get("content")?.toString()
         socket.emit("message", { content })
@@ -18,7 +18,7 @@ export function ChatInput() {
     }, [])
 
     return (
-        <form action={handleSubmit} className="flex gap-2 border-t p-4">
+        <form action={handleSubmit} className="flex gap-2 px-2 py-1">
             <Input name="content" placeholder="Digite sua mensagem" autoFocus />
             <Button>Enviar</Button>
         </form>
