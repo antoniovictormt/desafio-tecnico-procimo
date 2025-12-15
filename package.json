@@ -1,0 +1,12 @@
+{
+    "name": "desafio-tecnico-procimo",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "test": "jest"
+    },
+    "author": "Antonio Victor Melo Trindade",
+    "workspaces": [
+        "apps/*"
+    ]
+}
