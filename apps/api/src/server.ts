@@ -3,6 +3,7 @@ import http from "http"
 import cors from "cors"
 import { Server } from "socket.io"
 import path from "path"
+import crypto from "crypto"
 import { initialMessages } from "./seed/message"
 
 const app = express()
@@ -18,25 +19,46 @@ const io = new Server(httpServer, {
 
 app.use(express.static(path.resolve(__dirname, "..", "public")))
 
-let messages = initialMessages
+let messages = initialMessages.slice(-10)
 
 io.on("connection", socket => {
-    console.log("Client connected:", socket.id)
+    console.log("Socket conectado:", socket.id)
 
-    console.log(messages)
+    socket.on("login", user => {
+        socket.data.user = user
 
-    socket.emit("previousMessage", messages)
+        socket.join("chat")
+
+        socket.emit("previousMessage", messages)
+    })
 
     socket.on("message", message => {
+        if (!socket.data.user) return
+
+        const content = message?.content?.trim()
+
+        if (!content) {
+            socket.emit("errorMessage", {
+                message: "A mensagem não pode estar vazia."
+            })
+            return
+        }
+
         const normalizedMessage = {
             id: crypto.randomUUID(),
-            user: message.user,
-            content: message.content,
+            user: socket.data.user,
+            content,
             timestamp: Date.now()
         }
 
         messages.push(normalizedMessage)
-        socket.broadcast.emit("receivedMessage", normalizedMessage)
+        messages = messages.slice(-10)
+
+        io.to("chat").emit("previousMessage", messages)
+    })
+
+    socket.on("disconnect", () => {
+        socket.leave("chat")
     })
 })
 

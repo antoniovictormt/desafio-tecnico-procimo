@@ -12,7 +12,7 @@ const users = [
 ]
 
 export const initialMessages: IMessage[] = Array.from(
-    { length: 100 },
+    { length: 10 },
     (_, index): IMessage => {
         const user = users[index % users.length]
 
