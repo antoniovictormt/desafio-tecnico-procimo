@@ -1,16 +1,16 @@
 {
-  "name": "@desafio-tecnico-procimo/eslint-config",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "format": "prettier --write . && eslint --fix ./src"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
-    "eslint": "^9.39.2",
-    "eslint-config-next": "^16.0.10",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "^3.7.4",
-    "prettier-plugin-tailwindcss": "^0.7.2"
-  }
+    "name": "@desafio-tecnico-procimo/eslint-config",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "format": "prettier --write . && eslint --fix ./src"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3.3.3",
+        "eslint": "^9.39.2",
+        "eslint-config-next": "^16.0.10",
+        "eslint-plugin-simple-import-sort": "^12.1.1",
+        "prettier": "^3.7.4",
+        "prettier-plugin-tailwindcss": "^0.7.2"
+    }
 }
