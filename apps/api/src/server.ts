@@ -5,6 +5,7 @@ import { Server } from "socket.io"
 import path from "path"
 import crypto from "crypto"
 import { initialMessages } from "./seed/message"
+import "dotenv/config"
 
 const app = express()
 app.use(cors())
@@ -60,6 +61,8 @@ io.on("connection", socket => {
     })
 })
 
-httpServer.listen(3333, () => {
-    console.log("🚀 Server running on http://localhost:3333")
+const PORT = process.env.PORT! || 3332
+
+httpServer.listen(PORT, () => {
+    console.log("🚀 Server running on port:" + PORT)
 })
