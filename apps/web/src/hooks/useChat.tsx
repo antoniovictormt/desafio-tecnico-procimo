@@ -12,6 +12,10 @@ export interface IMessage {
     timestamp: number
 }
 
+interface SocketErrorPayload {
+    message: string
+}
+
 export function useChat({ initialUser }: { initialUser: string | null }) {
     const [user, setUser] = useState<string | null>(initialUser)
     const [messages, setMessages] = useState<IMessage[]>([])
@@ -29,8 +33,8 @@ export function useChat({ initialUser }: { initialUser: string | null }) {
             setMessages(messages)
         }
 
-        function onError(message: string) {
-            toast.error(message)
+        function onError(payload: SocketErrorPayload) {
+            toast.error(payload.message)
         }
 
         socket.on("previousMessage", onMessages)

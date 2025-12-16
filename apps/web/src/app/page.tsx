@@ -1,13 +1,6 @@
 import { use } from "react"
-import { cookies } from "next/headers"
 import { Chat } from "@/components/chat"
-
-async function getInitialUser() {
-    const cookieStore = await cookies()
-    const user = cookieStore.get("chat:user")?.value ?? null
-
-    return user
-}
+import { getInitialUser } from "@/lib/getInitialUser"
 
 export default function Home() {
     const initialUser = use(getInitialUser())

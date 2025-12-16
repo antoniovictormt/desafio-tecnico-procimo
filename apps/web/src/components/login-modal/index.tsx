@@ -20,6 +20,7 @@ export function LoginModal({
 }) {
     function handleSubmit(formData: FormData) {
         const user = formData.get("user")?.toString().trim()
+
         if (!user) return
 
         saveUser(user)
@@ -32,6 +33,7 @@ export function LoginModal({
             <DialogContent
                 className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 sm:max-w-sm"
                 onInteractOutside={e => e.preventDefault()}
+                aria-describedby={undefined}
             >
                 <DialogHeader>
                     <DialogTitle>Entrar no chat</DialogTitle>
@@ -39,7 +41,13 @@ export function LoginModal({
 
                 <form action={handleSubmit} className="space-y-4">
                     <Input name="user" placeholder="Seu nome" autoFocus />
-                    <Button className="w-full">Entrar</Button>
+                    <Button
+                        type="submit"
+                        data-testid="button-login"
+                        className="w-full"
+                    >
+                        Entrar
+                    </Button>
                 </form>
             </DialogContent>
         </Dialog>

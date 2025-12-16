@@ -17,7 +17,11 @@ export default function RootLayout({
         <html lang="pt-BR">
             <body>
                 {children}
-                <Toaster richColors />
+                <Toaster
+                    richColors
+                    position="bottom-left"
+                    data-testid="toster-info"
+                />
             </body>
         </html>
     )
