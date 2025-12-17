@@ -1,0 +1,24 @@
+services:
+    api:
+        build: ./apps/api
+        ports:
+            - "3333:3333"
+        environment:
+            - PORT=3333
+        volumes:
+            - ./apps/api/src:/app/src
+        command: npm run dev
+        restart: always
+
+    web:
+        build: ./apps/web
+        ports:
+            - "3000:3000"
+        environment:
+            - NEXT_PUBLIC_API_URL=http://host.docker.internal:3333
+        volumes:
+            - ./apps/web/src:/app/src
+        command: npm run dev
+        depends_on:
+            - api
+        restart: always
