@@ -1,13 +1,15 @@
-import { use } from "react"
-import { Chat } from "@/components/chat"
-import { getInitialUser } from "@/lib/getInitialUser"
+import { Suspense } from "react"
+import ChatWrapper from "@/components/chat/ChatWrapper"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Home() {
-    const initialUser = use(getInitialUser())
-
     return (
         <main className="bg-muted flex h-screen w-screen items-center justify-center">
-            <Chat initialUser={initialUser} />
+            <Suspense
+                fallback={<Skeleton className="h-96 w-full rounded-lg" />}
+            >
+                <ChatWrapper />
+            </Suspense>
         </main>
     )
 }
