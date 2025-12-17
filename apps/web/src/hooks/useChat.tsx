@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { socket } from "@/lib/socket"
 import { getSavedUser, clearUser } from "@/lib/storage"
-import { toast } from "sonner"
 
 export interface IMessage {
     id: string
@@ -13,18 +12,46 @@ export interface IMessage {
 }
 
 interface SocketErrorPayload {
+    type?: string
+    field?: string
     message: string
 }
+
+export type ConnectionStatus = "connected" | "disconnected" | "reconnecting"
 
 export function useChat({ initialUser }: { initialUser: string | null }) {
     const [user, setUser] = useState<string | null>(initialUser)
     const [messages, setMessages] = useState<IMessage[]>([])
+    const [connectionStatus, setConnectionStatus] =
+        useState<ConnectionStatus>("disconnected")
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
     useEffect(() => {
-        const savedUser = getSavedUser()
-        if (savedUser) {
-            setUser(savedUser)
-            socket.emit("login", savedUser)
+        function onConnect() {
+            setConnectionStatus("connected")
+        }
+
+        function onDisconnect() {
+            setConnectionStatus("disconnected")
+        }
+
+        function onReconnectAttempt() {
+            setConnectionStatus("reconnecting")
+        }
+
+        socket.on("connect", onConnect)
+        socket.on("disconnect", onDisconnect)
+        socket.on("reconnect_attempt", onReconnectAttempt)
+
+        // Set initial status
+        if (socket.connected) {
+            setConnectionStatus("connected")
+        }
+
+        return () => {
+            socket.off("connect", onConnect)
+            socket.off("disconnect", onDisconnect)
+            socket.off("reconnect_attempt", onReconnectAttempt)
         }
     }, [])
 
@@ -34,7 +61,7 @@ export function useChat({ initialUser }: { initialUser: string | null }) {
         }
 
         function onError(payload: SocketErrorPayload) {
-            toast.error(payload.message)
+            setErrorMessage(payload.message)
         }
 
         socket.on("previousMessage", onMessages)
@@ -47,10 +74,6 @@ export function useChat({ initialUser }: { initialUser: string | null }) {
     }, [])
 
     function logout() {
-        if (user) {
-            socket.emit("logout")
-        }
-
         clearUser()
         setUser(null)
         setMessages([])
@@ -60,6 +83,9 @@ export function useChat({ initialUser }: { initialUser: string | null }) {
         user,
         setUser,
         messages,
-        logout
+        logout,
+        connectionStatus,
+        errorMessage,
+        clearError: () => setErrorMessage(null)
     }
 }

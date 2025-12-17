@@ -9,13 +9,18 @@ export function getSavedUser() {
     const raw = localStorage.getItem(KEY)
     if (!raw) return null
 
-    const data = JSON.parse(raw)
-    if (Date.now() > data.expiresAt) {
+    try {
+        const data = JSON.parse(raw)
+        if (Date.now() > data.expiresAt) {
+            localStorage.removeItem(KEY)
+            return null
+        }
+
+        return data.user
+    } catch {
         localStorage.removeItem(KEY)
         return null
     }
-
-    return data.user
 }
 
 export function clearUser() {

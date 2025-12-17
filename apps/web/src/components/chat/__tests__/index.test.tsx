@@ -1,0 +1,142 @@
+import { render } from "@testing-library/react"
+import "@testing-library/jest-dom"
+import { Chat, getStatusText, getStatusColor } from ".."
+import { toast } from "sonner"
+
+jest.mock("sonner", () => ({
+    toast: {
+        error: jest.fn()
+    }
+}))
+
+jest.mock("@/hooks/useChat", () => ({
+    useChat: jest.fn()
+}))
+
+Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+    writable: true,
+    value: jest.fn()
+})
+
+const mockUseChat = require("@/hooks/useChat").useChat
+
+describe("Chat", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it("shows toast error when errorMessage is set", () => {
+        mockUseChat.mockReturnValue({
+            user: "TestUser",
+            messages: [],
+            connectionStatus: "connected",
+            errorMessage: "Erro de teste",
+            clearError: jest.fn()
+        })
+
+        render(<Chat initialUser="TestUser" />)
+
+        expect(toast.error).toHaveBeenCalledWith("Erro de teste")
+    })
+
+    it("does not show toast when errorMessage is null", () => {
+        mockUseChat.mockReturnValue({
+            user: "TestUser",
+            messages: [],
+            connectionStatus: "connected",
+            errorMessage: null,
+            clearError: jest.fn()
+        })
+
+        render(<Chat initialUser="TestUser" />)
+
+        expect(toast.error).not.toHaveBeenCalled()
+    })
+
+    it("renders status text for unknown connection status", () => {
+        mockUseChat.mockReturnValue({
+            user: "TestUser",
+            messages: [],
+            connectionStatus: "unknown" as any,
+            errorMessage: null,
+            clearError: jest.fn()
+        })
+
+        const { getByText } = render(<Chat initialUser="TestUser" />)
+
+        expect(getByText("Desconhecido")).toBeInTheDocument()
+    })
+
+    it("renders status color for unknown connection status", () => {
+        mockUseChat.mockReturnValue({
+            user: "TestUser",
+            messages: [],
+            connectionStatus: "unknown" as any,
+            errorMessage: null,
+            clearError: jest.fn()
+        })
+
+        const { container } = render(<Chat initialUser="TestUser" />)
+
+        const statusElement = container.querySelector(
+            '[class*="text-gray-600"]'
+        )
+        expect(statusElement).toBeInTheDocument()
+    })
+
+    it("getStatusText returns correct text for all statuses", () => {
+        expect(getStatusText("connected")).toBe("Conectado")
+        expect(getStatusText("disconnected")).toBe("Desconectado")
+        expect(getStatusText("reconnecting")).toBe("Reconectando...")
+        expect(getStatusText("unknown" as any)).toBe("Desconhecido")
+    })
+
+    it("getStatusColor returns correct color for all statuses", () => {
+        expect(getStatusColor("connected")).toBe("text-green-600")
+        expect(getStatusColor("disconnected")).toBe("text-red-600")
+        expect(getStatusColor("reconnecting")).toBe("text-yellow-600")
+        expect(getStatusColor("unknown" as any)).toBe("text-gray-600")
+    })
+
+    it("does not show connection status when user is not logged in", () => {
+        mockUseChat.mockReturnValue({
+            user: null,
+            messages: [],
+            connectionStatus: "connected",
+            errorMessage: null,
+            clearError: jest.fn()
+        })
+
+        const { container } = render(<Chat initialUser={null} />)
+
+        // Should not show any status text
+        expect(
+            container.querySelector('[class*="text-green-600"]')
+        ).not.toBeInTheDocument()
+        expect(
+            container.querySelector('[class*="text-red-600"]')
+        ).not.toBeInTheDocument()
+        expect(
+            container.querySelector('[class*="text-yellow-600"]')
+        ).not.toBeInTheDocument()
+        expect(
+            container.querySelector('[class*="text-gray-600"]')
+        ).not.toBeInTheDocument()
+    })
+
+    it("does not show logout button when user is not logged in", () => {
+        mockUseChat.mockReturnValue({
+            user: null,
+            messages: [],
+            connectionStatus: "connected",
+            errorMessage: null,
+            clearError: jest.fn()
+        })
+
+        const { container } = render(<Chat initialUser={null} />)
+
+        // Should not show logout button (LogOut icon)
+        const logoutButton = container.querySelector("button svg")
+        expect(logoutButton).not.toBeInTheDocument()
+    })
+})

@@ -16,11 +16,10 @@ export function ChatMessages({ messages, currentUser }: ChatMessagesProps) {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
 
+    const containerClass = "h-full space-y-3 overflow-y-auto p-4"
+
     return (
-        <div
-            className="h-full space-y-3 overflow-y-auto p-4"
-            data-testid="chat-messages"
-        >
+        <div className={containerClass} data-testid="chat-messages">
             {messages.map(msg => {
                 const isMine = msg.user === currentUser
 
