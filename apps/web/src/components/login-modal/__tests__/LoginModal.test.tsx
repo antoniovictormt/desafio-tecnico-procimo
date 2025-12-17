@@ -23,7 +23,7 @@ describe("LoginModal", () => {
 
         render(<LoginModal open onLogin={onLogin} />)
 
-        fireEvent.change(screen.getByPlaceholderText("Seu nome"), {
+        fireEvent.change(screen.getByPlaceholderText("Your name"), {
             target: { value: "Antonio" }
         })
 
@@ -39,7 +39,7 @@ describe("LoginModal", () => {
 
         render(<LoginModal open onLogin={onLogin} />)
 
-        fireEvent.change(screen.getByPlaceholderText("Seu nome"), {
+        fireEvent.change(screen.getByPlaceholderText("Your name"), {
             target: { value: "   " }
         })
 
@@ -55,7 +55,7 @@ describe("LoginModal", () => {
 
         render(<LoginModal open onLogin={onLogin} />)
 
-        const input = screen.getByPlaceholderText("Seu nome")
+        const input = screen.getByPlaceholderText("Your name")
         input.removeAttribute("name")
 
         fireEvent.click(screen.getByTestId("button-login"))

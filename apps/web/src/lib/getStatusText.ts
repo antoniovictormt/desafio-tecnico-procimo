@@ -3,12 +3,12 @@ import { ChatConnectionStatus } from "@/types"
 export const getStatusText = (status: ChatConnectionStatus) => {
     switch (status) {
         case "connected":
-            return "Conectado"
+            return "Connected"
         case "disconnected":
-            return "Desconectado"
+            return "Disconnected"
         case "reconnecting":
-            return "Reconectando..."
+            return "Reconnecting..."
         default:
-            return "Desconhecido"
+            return "Unknown"
     }
 }

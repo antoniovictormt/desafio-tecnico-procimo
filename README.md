@@ -69,3 +69,12 @@ To synchronize the "last 10 messages" on the server, we implemented the followin
 3. **Real-Time Updates**: As new messages are sent, they are broadcast to all connected clients and appended to the in-memory store. If the store exceeds 10 messages, the oldest message is removed to maintain the limit.
 
 This approach ensures efficient state synchronization while minimizing latency and resource usage. For production, a persistent database could be integrated to handle larger-scale data storage and retrieval.
+
+## Future Improvements
+
+Given more time, the following improvements could be implemented:
+
+- Persist messages using a database (e.g. PostgreSQL or Redis) instead of in-memory storage
+- Add authentication and user identity persistence
+- Improve error handling and reconnection strategies
+- Add E2E tests for real-time message flow

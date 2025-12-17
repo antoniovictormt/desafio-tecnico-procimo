@@ -32,13 +32,13 @@ describe("Chat", () => {
             user: "TestUser",
             messages: [],
             connectionStatus: "connected",
-            errorMessage: "Erro de teste",
+            errorMessage: "Test error",
             clearError: jest.fn()
         })
 
         render(<Chat initialUser="TestUser" />)
 
-        expect(toast.error).toHaveBeenCalledWith("Erro de teste")
+        expect(toast.error).toHaveBeenCalledWith("Test error")
     })
 
     it("does not show toast when errorMessage is null", () => {
@@ -66,7 +66,7 @@ describe("Chat", () => {
 
         const { getByText } = render(<Chat initialUser="TestUser" />)
 
-        expect(getByText("Desconhecido")).toBeInTheDocument()
+        expect(getByText("Unknown")).toBeInTheDocument()
     })
 
     it("renders status color for unknown connection status", () => {
@@ -86,10 +86,10 @@ describe("Chat", () => {
     })
 
     it("getStatusText returns correct text for all statuses", () => {
-        expect(getStatusText("connected")).toBe("Conectado")
-        expect(getStatusText("disconnected")).toBe("Desconectado")
-        expect(getStatusText("reconnecting")).toBe("Reconectando...")
-        expect(getStatusText("unknown" as any)).toBe("Desconhecido")
+        expect(getStatusText("connected")).toBe("Connected")
+        expect(getStatusText("disconnected")).toBe("Disconnected")
+        expect(getStatusText("reconnecting")).toBe("Reconnecting...")
+        expect(getStatusText("unknown" as any)).toBe("Unknown")
     })
 
     it("getStatusColor returns correct color for all statuses", () => {

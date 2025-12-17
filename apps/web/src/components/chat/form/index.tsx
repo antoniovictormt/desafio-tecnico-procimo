@@ -10,12 +10,12 @@ export function ChatForm() {
         const content = formData.get("content")?.toString()?.trim()
 
         if (!content) {
-            toast.error("A mensagem não pode estar vazia.")
+            toast.error("Message cannot be empty.")
             return
         }
 
         if (content.length > 500) {
-            toast.error("A mensagem deve ter no máximo 500 caracteres.")
+            toast.error("Message must be at most 500 characters long.")
             return
         }
 
@@ -32,11 +32,11 @@ export function ChatForm() {
         <form action={handleSubmit} className="flex gap-2 px-2 py-1">
             <Input
                 name="content"
-                placeholder="Digite sua mensagem"
+                placeholder="Type your message"
                 autoFocus
                 aria-label="message-input"
             />
-            <Button>Enviar</Button>
+            <Button>Send</Button>
         </form>
     )
 }
