@@ -77,7 +77,6 @@ describe("ChatForm", () => {
 
         const longMessage = "a".repeat(501)
 
-        // Set the input value directly to avoid slow typing
         input.setAttribute("value", longMessage)
 
         await user.click(button)
@@ -110,7 +109,6 @@ describe("ChatForm", () => {
         const input = screen.getByLabelText("message-input")
         const button = screen.getByRole("button", { name: /enviar/i })
 
-        // Remove name attribute to simulate missing form data
         input.removeAttribute("name")
 
         await user.click(button)
