@@ -25,7 +25,7 @@ describe("ChatForm", () => {
         render(<ChatForm />)
 
         const input = screen.getByLabelText("message-input")
-        const button = screen.getByRole("button", { name: /enviar/i })
+        const button = screen.getByRole("button", { name: /send/i })
 
         await user.type(input, "Hello")
         await user.click(button)
@@ -40,13 +40,11 @@ describe("ChatForm", () => {
 
         render(<ChatForm />)
 
-        const button = screen.getByRole("button", { name: /enviar/i })
+        const button = screen.getByRole("button", { name: /send/i })
 
         await user.click(button)
 
-        expect(toast.error).toHaveBeenCalledWith(
-            "A mensagem não pode estar vazia."
-        )
+        expect(toast.error).toHaveBeenCalledWith("Message cannot be empty.")
         expect(socket.emit).not.toHaveBeenCalled()
     })
 
@@ -56,14 +54,12 @@ describe("ChatForm", () => {
         render(<ChatForm />)
 
         const input = screen.getByLabelText("message-input")
-        const button = screen.getByRole("button", { name: /enviar/i })
+        const button = screen.getByRole("button", { name: /send/i })
 
         await user.type(input, "   ")
         await user.click(button)
 
-        expect(toast.error).toHaveBeenCalledWith(
-            "A mensagem não pode estar vazia."
-        )
+        expect(toast.error).toHaveBeenCalledWith("Message cannot be empty.")
         expect(socket.emit).not.toHaveBeenCalled()
     })
 
@@ -73,7 +69,7 @@ describe("ChatForm", () => {
         render(<ChatForm />)
 
         const input = screen.getByLabelText("message-input")
-        const button = screen.getByRole("button", { name: /enviar/i })
+        const button = screen.getByRole("button", { name: /send/i })
 
         const longMessage = "a".repeat(501)
 
@@ -82,7 +78,7 @@ describe("ChatForm", () => {
         await user.click(button)
 
         expect(toast.error).toHaveBeenCalledWith(
-            "A mensagem deve ter no máximo 500 caracteres."
+            "Message must be at most 500 characters long."
         )
         expect(socket.emit).not.toHaveBeenCalled()
     })
@@ -93,7 +89,7 @@ describe("ChatForm", () => {
         render(<ChatForm />)
 
         const input = screen.getByLabelText("message-input")
-        const button = screen.getByRole("button", { name: /enviar/i })
+        const button = screen.getByRole("button", { name: /send/i })
 
         await user.type(input, "Hello")
         await user.click(button)
@@ -107,15 +103,13 @@ describe("ChatForm", () => {
         render(<ChatForm />)
 
         const input = screen.getByLabelText("message-input")
-        const button = screen.getByRole("button", { name: /enviar/i })
+        const button = screen.getByRole("button", { name: /send/i })
 
         input.removeAttribute("name")
 
         await user.click(button)
 
-        expect(toast.error).toHaveBeenCalledWith(
-            "A mensagem não pode estar vazia."
-        )
+        expect(toast.error).toHaveBeenCalledWith("Message cannot be empty.")
         expect(socket.emit).not.toHaveBeenCalled()
     })
 })

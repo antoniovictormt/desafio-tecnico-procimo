@@ -46,13 +46,11 @@ describe("useChat – error handling", () => {
 
         act(() => {
             mockedSocket.__emit("errorMessage", {
-                message: "A mensagem não pode estar vazia."
+                message: "Message cannot be empty."
             })
         })
 
-        expect(result.current.errorMessage).toBe(
-            "A mensagem não pode estar vazia."
-        )
+        expect(result.current.errorMessage).toBe("Message cannot be empty.")
     })
 
     it("clears error message when clearError is called", () => {
@@ -64,11 +62,11 @@ describe("useChat – error handling", () => {
 
         act(() => {
             mockedSocket.__emit("errorMessage", {
-                message: "Erro de teste"
+                message: "Test error"
             })
         })
 
-        expect(result.current.errorMessage).toBe("Erro de teste")
+        expect(result.current.errorMessage).toBe("Test error")
 
         act(() => {
             result.current.clearError()
@@ -144,7 +142,7 @@ describe("useChat – error handling", () => {
             {
                 id: "1",
                 user: "Antonio",
-                content: "Olá",
+                content: "Hello",
                 timestamp: Date.now()
             }
         ]
