@@ -1,4 +1,4 @@
-import { IMessage } from "@/@types/IMessage"
+import { IMessage } from "@desafio-tecnico-procimo/types"
 
 const users = [
     "System",

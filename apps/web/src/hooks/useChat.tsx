@@ -5,27 +5,12 @@ import { socket } from "@/lib/socket"
 import { getSavedUser, clearUser } from "@/lib/storage"
 import { useChatSocket } from "./useChatSocket"
 
-export interface IMessage {
-    id: string
-    user: string
-    content: string
-    timestamp: number
-}
-
-interface SocketErrorPayload {
-    type?: string
-    field?: string
-    message: string
-}
-
-export type ConnectionStatus = "connected" | "disconnected" | "reconnecting"
-
 export function useChat({ initialUser }: { initialUser: string | null }) {
     const [user, setUser] = useState<string | null>(initialUser)
     const {
         messages,
-        connectionStatus,
-        errorMessage,
+        socketConnectionStatus: connectionStatus,
+        socketErrorMessage: errorMessage,
         clearError,
         logout: socketLogout
     } = useChatSocket()
