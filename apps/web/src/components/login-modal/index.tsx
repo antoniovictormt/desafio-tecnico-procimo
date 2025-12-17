@@ -36,17 +36,17 @@ export function LoginModal({
                 aria-describedby={undefined}
             >
                 <DialogHeader>
-                    <DialogTitle>Entrar no chat</DialogTitle>
+                    <DialogTitle>Join the chat</DialogTitle>
                 </DialogHeader>
 
                 <form role="form" action={handleSubmit} className="space-y-4">
-                    <Input name="user" placeholder="Seu nome" autoFocus />
+                    <Input name="user" placeholder="Your name" autoFocus />
                     <Button
                         type="submit"
                         data-testid="button-login"
                         className="w-full"
                     >
-                        Entrar
+                        Join
                     </Button>
                 </form>
             </DialogContent>

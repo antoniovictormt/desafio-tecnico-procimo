@@ -41,7 +41,7 @@ describe("Chat Socket.IO", () => {
         socket.disconnect()
     })
 
-    it("deve enviar mensagens anteriores após login", done => {
+    it("should send previous messages after login", done => {
         socket.on("connect", () => {
             socket.emit("login", { id: "1", name: "Antonio" })
         })
@@ -52,7 +52,7 @@ describe("Chat Socket.IO", () => {
         })
     })
 
-    it("não deve permitir mensagem vazia", done => {
+    it("should not allow empty message", done => {
         socket.on("connect", () => {
             socket.emit("login", { id: "1", name: "Antonio" })
             socket.emit("message", { content: "   " })
@@ -62,13 +62,13 @@ describe("Chat Socket.IO", () => {
             expect(error).toEqual({
                 type: "validation",
                 field: "content",
-                message: "A mensagem não pode estar vazia."
+                message: "Message cannot be empty."
             })
             done()
         })
     })
 
-    it("não deve permitir mensagem com mais de 500 caracteres", done => {
+    it("should not allow messages longer than 500 characters", done => {
         const longMessage = "a".repeat(501)
 
         socket.on("connect", () => {
@@ -80,13 +80,13 @@ describe("Chat Socket.IO", () => {
             expect(error).toEqual({
                 type: "validation",
                 field: "content",
-                message: "A mensagem deve ter no máximo 500 caracteres."
+                message: "Message must be at most 500 characters long."
             })
             done()
         })
     })
 
-    it("não deve processar mensagem se o usuário não estiver logado", done => {
+    it("should not process message if user is not logged in", done => {
         let eventEmitted = false
 
         socket.on("connect", () => {
@@ -107,7 +107,7 @@ describe("Chat Socket.IO", () => {
         }, 100)
     })
 
-    it("deve propagar mensagem válida para o chat", done => {
+    it("should broadcast a valid message to the chat", done => {
         let callCount = 0
 
         socket.on("connect", () => {

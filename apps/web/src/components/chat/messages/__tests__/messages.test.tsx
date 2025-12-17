@@ -11,13 +11,13 @@ const messages = [
     {
         id: "1",
         user: "Antonio",
-        content: "Olá",
+        content: "Hello",
         timestamp: Date.now()
     },
     {
         id: "2",
         user: "Maria",
-        content: "Oi",
+        content: "Hi",
         timestamp: Date.now()
     }
 ]
@@ -36,7 +36,7 @@ describe("ChatMessages", () => {
     it("renders my message correctly", () => {
         render(<ChatMessages messages={messages} currentUser="Antonio" />)
 
-        expect(screen.getByTestId("my-message")).toHaveTextContent("Olá")
+        expect(screen.getByTestId("my-message")).toHaveTextContent("Hello")
     })
 
     it("renders other user message with username", () => {
