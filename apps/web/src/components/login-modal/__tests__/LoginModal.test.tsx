@@ -40,7 +40,7 @@ describe("LoginModal", () => {
         render(<LoginModal open onLogin={onLogin} />)
 
         fireEvent.change(screen.getByPlaceholderText("Seu nome"), {
-            target: { value: "   " } // só espaços
+            target: { value: "   " }
         })
 
         fireEvent.click(screen.getByTestId("button-login"))
@@ -55,7 +55,6 @@ describe("LoginModal", () => {
 
         render(<LoginModal open onLogin={onLogin} />)
 
-        // Remove the name attribute from input to simulate missing form data
         const input = screen.getByPlaceholderText("Seu nome")
         input.removeAttribute("name")
 

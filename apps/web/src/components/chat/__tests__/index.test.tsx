@@ -109,7 +109,6 @@ describe("Chat", () => {
 
         const { container } = render(<Chat initialUser={null} />)
 
-        // Should not show any status text
         expect(
             container.querySelector('[class*="text-green-600"]')
         ).not.toBeInTheDocument()
@@ -135,7 +134,6 @@ describe("Chat", () => {
 
         const { container } = render(<Chat initialUser={null} />)
 
-        // Should not show logout button (LogOut icon)
         const logoutButton = container.querySelector("button svg")
         expect(logoutButton).not.toBeInTheDocument()
     })

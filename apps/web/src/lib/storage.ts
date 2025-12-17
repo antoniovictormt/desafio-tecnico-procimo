@@ -1,7 +1,7 @@
 const KEY = "chat:user"
 
-export function saveUser(user: string, days = 3) {
-    const expiresAt = Date.now() + days * 86400000
+export function saveUser(user: string, days = 1) {
+    const expiresAt = Date.now() + days * 24 * 60 * 60 * 1000
     localStorage.setItem(KEY, JSON.stringify({ user, expiresAt }))
 }
 
@@ -11,6 +11,7 @@ export function getSavedUser() {
 
     try {
         const data = JSON.parse(raw)
+
         if (Date.now() > data.expiresAt) {
             localStorage.removeItem(KEY)
             return null

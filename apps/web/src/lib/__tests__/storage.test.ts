@@ -32,7 +32,7 @@ describe("storage", () => {
             expect(parsed.user).toBe(user)
             expect(parsed.expiresAt).toBeGreaterThanOrEqual(
                 now + days * 86400000 - 10
-            ) // Allow small time difference
+            )
             expect(parsed.expiresAt).toBeLessThanOrEqual(
                 now + days * 86400000 + 10
             )
@@ -47,7 +47,7 @@ describe("storage", () => {
 
         it("returns user when valid data exists", () => {
             const user = "testuser"
-            const expiresAt = Date.now() + 86400000 // 1 day from now
+            const expiresAt = Date.now() + 86400000
             localStorage.setItem(
                 "chat:user",
                 JSON.stringify({ user, expiresAt })
@@ -59,7 +59,7 @@ describe("storage", () => {
 
         it("returns null when data is expired", () => {
             const user = "testuser"
-            const expiresAt = Date.now() - 1000 // 1 second ago
+            const expiresAt = Date.now() - 1000
             localStorage.setItem(
                 "chat:user",
                 JSON.stringify({ user, expiresAt })
