@@ -1,13 +1,43 @@
-FROM node:20-alpine
+# syntax=docker/dockerfile:1.18-labs
+
+# -------- Production Builder --------
+FROM node:lts AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy manifests 
+COPY package.json package-lock.json ./
+COPY apps/web/package.json apps/web/
+COPY --parents packages/*/package.json ./
 
-RUN npm install
+# Install workspace deps
+RUN npm install --legacy-peer-deps
 
-COPY . .
+# Copy in only what the Web needs
+COPY apps/web apps/web
+COPY packages packages
 
-EXPOSE 3000
+# Build the app 
+RUN npm run build --workspace=apps/web
 
-CMD ["npm", "start"]
+# -------- Production --------
+FROM node:lts AS prod
+
+WORKDIR /app
+
+RUN apk add --no-cache curl
+
+COPY --from=builder /app/apps/web/.next/standalone ./
+COPY --from=builder /app/apps/web/public ./apps/web/public
+COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
+
+CMD ["node", "apps/web/server.js"]
+
+# -------- Development (with hot reload) --------
+FROM node:lts AS dev
+
+RUN apk add --no-cache curl
+
+WORKDIR /app
+
+CMD ["npm", "run", "dev", "--workspace=apps/web"]

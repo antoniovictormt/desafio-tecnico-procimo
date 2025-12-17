@@ -57,9 +57,8 @@ export function Chat({ initialUser }: { initialUser: string | null }) {
                         {user && (
                             <Button
                                 data-testid="logout-button"
-                                variant="outline"
+                                variant="destructive"
                                 size="icon"
-                                className="text-red-500"
                                 onClick={logout}
                             >
                                 <LogOut />
