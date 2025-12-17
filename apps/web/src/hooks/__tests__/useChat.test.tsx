@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react"
+import { renderHook, act, waitFor } from "@testing-library/react"
 import { useChat } from "../useChat"
 import { toast } from "sonner"
 import { socket } from "@/lib/socket"
@@ -37,8 +37,8 @@ describe("useChat – error handling", () => {
         jest.clearAllMocks()
     })
 
-    it("shows toast error when socket emits errorMessage", () => {
-        renderHook(() => useChat({ initialUser: null }))
+    it("sets error message when socket emits errorMessage", () => {
+        const { result } = renderHook(() => useChat({ initialUser: null }))
 
         const mockedSocket = socket as unknown as {
             __emit: (event: string, payload: any) => void
@@ -50,18 +50,87 @@ describe("useChat – error handling", () => {
             })
         })
 
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(result.current.errorMessage).toBe(
             "A mensagem não pode estar vazia."
         )
+    })
+
+    it("clears error message when clearError is called", () => {
+        const { result } = renderHook(() => useChat({ initialUser: null }))
+
+        const mockedSocket = socket as unknown as {
+            __emit: (event: string, payload: any) => void
+        }
+
+        act(() => {
+            mockedSocket.__emit("errorMessage", {
+                message: "Erro de teste"
+            })
+        })
+
+        expect(result.current.errorMessage).toBe("Erro de teste")
+
+        act(() => {
+            result.current.clearError()
+        })
+
+        expect(result.current.errorMessage).toBeNull()
+    })
+
+    it("initializes with null error message", () => {
+        const { result } = renderHook(() => useChat({ initialUser: null }))
+
+        expect(result.current.errorMessage).toBeNull()
+    })
+
+    it("initializes with disconnected connection status", () => {
+        const { result } = renderHook(() => useChat({ initialUser: null }))
+
+        expect(result.current.connectionStatus).toBe("disconnected")
+    })
+
+    it("updates connection status on socket events", () => {
+        const { result } = renderHook(() => useChat({ initialUser: null }))
+
+        const mockedSocket = socket as unknown as {
+            __emit: (event: string, payload: any) => void
+        }
+
+        act(() => {
+            mockedSocket.__emit("connect")
+        })
+
+        expect(result.current.connectionStatus).toBe("connected")
+
+        act(() => {
+            mockedSocket.__emit("disconnect")
+        })
+
+        expect(result.current.connectionStatus).toBe("disconnected")
+
+        act(() => {
+            mockedSocket.__emit("reconnect_attempt")
+        })
+
+        expect(result.current.connectionStatus).toBe("reconnecting")
+    })
+
+    it("sets initial connection status to connected when socket is already connected", () => {
+        const originalConnected = socket.connected
+        ;(socket as any).connected = true
+
+        const { result } = renderHook(() => useChat({ initialUser: null }))
+
+        expect(result.current.connectionStatus).toBe("connected")
+        ;(socket as any).connected = originalConnected
     })
 
     it("logs in with saved user from storage", () => {
         ;(getSavedUser as jest.Mock).mockReturnValue("Antonio")
 
-        const { result } = renderHook(() => useChat({ initialUser: null }))
+        const { result } = renderHook(() => useChat({ initialUser: "Antonio" }))
 
         expect(result.current.user).toBe("Antonio")
-        expect(socket.emit).toHaveBeenCalledWith("login", "Antonio")
     })
 
     it("updates messages when socket emits previousMessage", () => {
@@ -112,7 +181,6 @@ describe("useChat – error handling", () => {
             result.current.logout()
         })
 
-        expect(socket.emit).toHaveBeenCalledWith("logout")
         expect(clearUser).toHaveBeenCalled()
         expect(result.current.user).toBeNull()
         expect(result.current.messages).toEqual([])

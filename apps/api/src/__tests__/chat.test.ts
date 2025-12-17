@@ -60,7 +60,27 @@ describe("Chat Socket.IO", () => {
 
         socket.on("errorMessage", error => {
             expect(error).toEqual({
+                type: "validation",
+                field: "content",
                 message: "A mensagem não pode estar vazia."
+            })
+            done()
+        })
+    })
+
+    it("não deve permitir mensagem com mais de 500 caracteres", done => {
+        const longMessage = "a".repeat(501)
+
+        socket.on("connect", () => {
+            socket.emit("login", { id: "1", name: "Antonio" })
+            socket.emit("message", { content: longMessage })
+        })
+
+        socket.on("errorMessage", error => {
+            expect(error).toEqual({
+                type: "validation",
+                field: "content",
+                message: "A mensagem deve ter no máximo 500 caracteres."
             })
             done()
         })

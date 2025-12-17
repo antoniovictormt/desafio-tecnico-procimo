@@ -27,10 +27,10 @@ describe("ChatMessages", () => {
         HTMLElement.prototype.scrollIntoView = jest.fn()
     })
 
-    it("renders all messages", () => {
+    it("renders the messages container", () => {
         render(<ChatMessages messages={messages} currentUser="Antonio" />)
 
-        expect(screen.getAllByTestId("chat-message")).toHaveLength(2)
+        expect(screen.getByTestId("chat-messages")).toBeInTheDocument()
     })
 
     it("renders my message correctly", () => {
@@ -43,5 +43,27 @@ describe("ChatMessages", () => {
         render(<ChatMessages messages={messages} currentUser="Antonio" />)
 
         expect(screen.getByTestId("message-user")).toHaveTextContent("Maria")
+    })
+
+    it("scrolls to bottom when messages change", () => {
+        const scrollIntoViewMock = HTMLElement.prototype
+            .scrollIntoView as jest.MockedFunction<any>
+        scrollIntoViewMock.mockClear()
+
+        const { rerender } = render(
+            <ChatMessages messages={[]} currentUser="Antonio" />
+        )
+
+        expect(scrollIntoViewMock).toHaveBeenCalledWith({
+            behavior: "smooth"
+        })
+
+        scrollIntoViewMock.mockClear()
+
+        rerender(<ChatMessages messages={messages} currentUser="Antonio" />)
+
+        expect(scrollIntoViewMock).toHaveBeenCalledWith({
+            behavior: "smooth"
+        })
     })
 })

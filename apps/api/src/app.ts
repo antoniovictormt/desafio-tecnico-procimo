@@ -31,7 +31,18 @@ export function createServer() {
 
             if (!content) {
                 socket.emit("errorMessage", {
+                    type: "validation",
+                    field: "content",
                     message: "A mensagem não pode estar vazia."
+                })
+                return
+            }
+
+            if (content.length > 500) {
+                socket.emit("errorMessage", {
+                    type: "validation",
+                    field: "content",
+                    message: "A mensagem deve ter no máximo 500 caracteres."
                 })
                 return
             }

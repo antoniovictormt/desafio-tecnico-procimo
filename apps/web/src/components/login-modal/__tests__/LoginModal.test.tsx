@@ -49,4 +49,20 @@ describe("LoginModal", () => {
         expect(saveUser).not.toHaveBeenCalled()
         expect(socket.emit).not.toHaveBeenCalled()
     })
+
+    it("does not submit when form data is missing user field", () => {
+        const onLogin = jest.fn()
+
+        render(<LoginModal open onLogin={onLogin} />)
+
+        // Remove the name attribute from input to simulate missing form data
+        const input = screen.getByPlaceholderText("Seu nome")
+        input.removeAttribute("name")
+
+        fireEvent.click(screen.getByTestId("button-login"))
+
+        expect(onLogin).not.toHaveBeenCalled()
+        expect(saveUser).not.toHaveBeenCalled()
+        expect(socket.emit).not.toHaveBeenCalled()
+    })
 })
