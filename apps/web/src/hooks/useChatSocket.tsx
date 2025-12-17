@@ -2,29 +2,14 @@
 
 import { useEffect, useState } from "react"
 import { socket } from "@/lib/socket"
-import { getSavedUser, clearUser } from "@/lib/storage"
+import { clearUser } from "@/lib/storage"
+import { IMessage } from "@desafio-tecnico-procimo/types"
+import { ChatConnectionStatus, ChatSocketState } from "@/types"
 
-export interface IMessage {
-    id: string
-    user: string
-    content: string
-    timestamp: number
-}
-
-export type ConnectionStatus = "connected" | "disconnected" | "reconnecting"
-
-interface UseChatSocketReturn {
-    messages: IMessage[]
-    connectionStatus: ConnectionStatus
-    errorMessage: string | null
-    clearError: () => void
-    logout: () => void
-}
-
-export function useChatSocket(): UseChatSocketReturn {
+export function useChatSocket(): ChatSocketState {
     const [messages, setMessages] = useState<IMessage[]>([])
     const [connectionStatus, setConnectionStatus] =
-        useState<ConnectionStatus>("disconnected")
+        useState<ChatConnectionStatus>("disconnected")
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
     useEffect(() => {
@@ -80,8 +65,8 @@ export function useChatSocket(): UseChatSocketReturn {
 
     return {
         messages,
-        connectionStatus,
-        errorMessage,
+        socketConnectionStatus: connectionStatus,
+        socketErrorMessage: errorMessage,
         clearError: () => setErrorMessage(null),
         logout
     }

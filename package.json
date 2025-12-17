@@ -13,6 +13,7 @@
         "packages/*"
     ],
     "dependencies": {
+        "@desafio-tecnico-procimo/types": "*",
         "@desafio-tecnico-procimo/eslint-config": "*",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/jest-dom": "^6.9.1",

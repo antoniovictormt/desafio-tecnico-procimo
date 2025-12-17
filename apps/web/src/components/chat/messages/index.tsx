@@ -2,12 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-import { IMessage } from "@/hooks/useChat"
-
-interface ChatMessagesProps {
-    messages: IMessage[]
-    currentUser: string | null
-}
+import { ChatMessagesProps } from "@/types"
 
 export function ChatMessages({ messages, currentUser }: ChatMessagesProps) {
     const bottomRef = useRef<HTMLDivElement>(null)
