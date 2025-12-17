@@ -1,4 +1,4 @@
-import { saveUser, getSavedUser, clearUser } from "../storage"
+import { saveUser, getSavedUser, clearUser } from ".."
 
 describe("storage", () => {
     beforeEach(() => {

@@ -39,7 +39,7 @@ export function LoginModal({
                     <DialogTitle>Entrar no chat</DialogTitle>
                 </DialogHeader>
 
-                <form action={handleSubmit} className="space-y-4">
+                <form role="form" action={handleSubmit} className="space-y-4">
                     <Input name="user" placeholder="Seu nome" autoFocus />
                     <Button
                         type="submit"

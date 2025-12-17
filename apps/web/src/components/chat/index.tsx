@@ -5,35 +5,12 @@ import { Button } from "@/components/ui/button"
 import { LoginModal } from "../login-modal"
 import { ChatForm } from "./form"
 import { ChatMessages } from "./messages"
-import { useChat, ConnectionStatus } from "@/hooks/useChat"
+import { useChat } from "@/hooks/useChat"
 import { LogOut } from "lucide-react"
 import { toast } from "sonner"
-
-export const getStatusText = (status: ConnectionStatus) => {
-    switch (status) {
-        case "connected":
-            return "Conectado"
-        case "disconnected":
-            return "Desconectado"
-        case "reconnecting":
-            return "Reconectando..."
-        default:
-            return "Desconhecido"
-    }
-}
-
-export const getStatusColor = (status: ConnectionStatus) => {
-    switch (status) {
-        case "connected":
-            return "text-green-600"
-        case "disconnected":
-            return "text-red-600"
-        case "reconnecting":
-            return "text-yellow-600"
-        default:
-            return "text-gray-600"
-    }
-}
+import { ModeToggle } from "../mode-toggle"
+import { getStatusColor } from "@/lib/getStatusColor"
+import { getStatusText } from "@/lib/getStatusText"
 
 export function Chat({ initialUser }: { initialUser: string | null }) {
     const {
@@ -44,9 +21,7 @@ export function Chat({ initialUser }: { initialUser: string | null }) {
         connectionStatus,
         errorMessage,
         clearError
-    } = useChat({
-        initialUser
-    })
+    } = useChat({ initialUser })
 
     useEffect(() => {
         if (errorMessage) {
@@ -63,19 +38,34 @@ export function Chat({ initialUser }: { initialUser: string | null }) {
                 <header className="flex items-center justify-between border-b px-4 py-3">
                     <div className="flex flex-col">
                         <span className="font-semibold">{user}</span>
+
                         {user && (
                             <span
-                                className={`text-sm ${getStatusColor(connectionStatus)}`}
+                                data-testid="connection-status"
+                                className={`text-sm ${getStatusColor(
+                                    connectionStatus
+                                )}`}
                             >
                                 {getStatusText(connectionStatus)}
                             </span>
                         )}
                     </div>
-                    {user && (
-                        <Button variant="ghost" size="sm" onClick={logout}>
-                            <LogOut />
-                        </Button>
-                    )}
+
+                    <div className="flex items-center justify-center gap-2">
+                        <ModeToggle />
+
+                        {user && (
+                            <Button
+                                data-testid="logout-button"
+                                variant="outline"
+                                size="icon"
+                                className="text-red-500"
+                                onClick={logout}
+                            >
+                                <LogOut />
+                            </Button>
+                        )}
+                    </div>
                 </header>
 
                 <div className="flex-1 overflow-hidden">
