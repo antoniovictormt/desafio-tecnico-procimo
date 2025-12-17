@@ -28,7 +28,7 @@ services:
             target: dev
         working_dir: /app/apps/api
         env_file:
-            - ./apps/api/.env
+            - ./apps/api/.env.example
         depends_on:
             setup:
                 condition: service_completed_successfully
@@ -46,7 +46,7 @@ services:
             target: dev
         working_dir: /app/apps/web
         env_file:
-            - ./apps/web/.env
+            - ./apps/web/.env.example
         depends_on:
             setup:
                 condition: service_completed_successfully
