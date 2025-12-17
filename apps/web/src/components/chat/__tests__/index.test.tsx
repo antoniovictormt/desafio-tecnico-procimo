@@ -1,7 +1,9 @@
 import { render } from "@testing-library/react"
 import "@testing-library/jest-dom"
-import { Chat, getStatusText, getStatusColor } from ".."
+import { Chat } from ".."
 import { toast } from "sonner"
+import { getStatusColor } from "@/lib/getStatusColor"
+import { getStatusText } from "@/lib/getStatusText"
 
 jest.mock("sonner", () => ({
     toast: {
@@ -78,10 +80,9 @@ describe("Chat", () => {
 
         const { container } = render(<Chat initialUser="TestUser" />)
 
-        const statusElement = container.querySelector(
-            '[class*="text-gray-600"]'
-        )
-        expect(statusElement).toBeInTheDocument()
+        expect(
+            container.querySelector('[class*="text-gray-600"]')
+        ).toBeInTheDocument()
     })
 
     it("getStatusText returns correct text for all statuses", () => {
@@ -132,9 +133,8 @@ describe("Chat", () => {
             clearError: jest.fn()
         })
 
-        const { container } = render(<Chat initialUser={null} />)
+        const { queryByTestId } = render(<Chat initialUser={null} />)
 
-        const logoutButton = container.querySelector("button svg")
-        expect(logoutButton).not.toBeInTheDocument()
+        expect(queryByTestId("logout-button")).not.toBeInTheDocument()
     })
 })
